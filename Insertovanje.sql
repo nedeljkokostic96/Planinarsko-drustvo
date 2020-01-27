@@ -49,12 +49,7 @@ INSERT INTO znamenitost(naziv, opis, staza) VALUES('Rochehaut ','Predivna zelena
 
 /*INSERT TABLE planinarsko_drustvo:*/
 INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Mladi planinari','770821','Jovana Hadži - Vasiljevića 12');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Krug','212910','Bore Stankovića 7');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Lola','321847','Zmaj Jovina 18');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Pobeda','119260','Dečanska 11');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Savez Vojvodine','741009','Makedonska 9');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('PDBalkan','900102','Bulevar Nikole Pašića 40');
-INSERT INTO planinarsko_drustvo(naziv, telefon, adresa) VALUES('Vrh','195706','Nikole Tesle 80');
+
 
 /*INSERT TABLE clanarina:*/
 INSERT INTO clanarina(iznos, od_datum, do_datum, planinar, sekretar, planinarsko_drustvo) VALUES('8400.0','2019-07-02','2020-07-02', '1', '2', '1');
