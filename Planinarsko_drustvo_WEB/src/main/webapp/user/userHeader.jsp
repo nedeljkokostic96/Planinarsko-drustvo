@@ -28,12 +28,12 @@
 				</div>
 				<div class="collapse navbar-collapse navbar-right">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#header"
+						<li class="active"><a href="../user/indexUser"
 							style="width: 120px; text-align: center; margin-right: 0px;">Почетна</a></li>
-						<li class="active"><a href="#"
+						<li class="active"><a href="../userController/getPlanine"
 							style="width: 120px; text-align: center; margin-left: 5px;">Резервација</a></li>
-						<li class="active"><a href="#"
-							style="width: 120px; text-align: center; margin-left: 5px;">Портал</a></li>
+						<li class="active"><a href="#"style="width: 120px; text-align: center; margin-left: 5px;">Стазе</a></li>
+						<li class="active"><a href="#"style="width: 120px; text-align: center; margin-left: 5px;">Портал</a></li>
 						<li class="active"><a href="../loginController/logOut"
 							style="width: 120px; text-align: center; margin-left: 5px;"
 							onclick="">Одјава</a></li>

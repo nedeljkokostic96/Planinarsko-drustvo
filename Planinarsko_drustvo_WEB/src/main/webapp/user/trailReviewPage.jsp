@@ -23,24 +23,32 @@
 <body>
 	<%@ include file="userHeader.jsp" %>
 
-
-	<center>
-		<div style="padding: 200px 0px;">
-			<form action="../userController/prikaziSliku" method="post" enctype="multipart/form-data">
-				<input type="file" name="mpf"> 
-				<input type="submit" value="Sacuvaj">
-			</form>
-		</div>
-	</center>
-	
-	<center>
-		<c:if test="${not empty mpf }">
-			<center>
-				<img alt="" src="../userControllor/getImage?title=mpf">
-			</center>
-		</c:if>
-	</center>
-
+	<c:if test="${not empty planineStaze }">
+		<center>
+			<div style="margin: 200px 0px;">
+				<form action="../userController/chosePlanina">
+					<table>
+						<tr>
+							<th>Одаберите планину:</th>
+							<td>
+								<select name="planinaId">
+									<c:forEach var="pl" items="${planineStaze }">
+										<option value="${pl.planinaId }">${pl.naziv }</option>
+									</c:forEach>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td>
+								<input type="submit" value="Пронађи">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</center>
+	</c:if>
 
 	<%@ include file="userFooter.jsp" %>
 	<%@ include file="userScripts.jsp" %>
