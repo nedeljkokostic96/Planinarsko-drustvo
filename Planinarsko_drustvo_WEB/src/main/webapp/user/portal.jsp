@@ -26,20 +26,34 @@
 
 	<center>
 		<div style="padding: 200px 0px;">
-			<form action="../userController/prikaziSliku" method="post" enctype="multipart/form-data">
-				<input type="file" name="mpf"> 
-				<input type="submit" value="Sacuvaj">
+			<form action="../userController/saveSlika" method="post" enctype="multipart/form-data">
+				<table>
+					<tr>
+						<th>Изаберите sliku:</th>
+						<td><input type="file" name="mpf" max=""><td> 
+					</tr>
+					<tr>
+						<th>ИД искуства:</th>
+						<td><input type="text" name="iskustvoString"></td>
+					</tr>
+					<tr>
+						<th></th>
+						<td><input type="submit" value="Sacuvaj"></td>
+					</tr>
+				</table>
 			</form>
 		</div>
 	</center>
 	
-	<center>
-		<c:if test="${not empty mpf }">
-			<center>
-				<img alt="" src="../userControllor/getImage?title=mpf">
+			<c:if test="${not empty allPictures }">
+				<center>
+				<c:forEach var="picture" items="${allPictures }">
+					<div style="margin: 10px 0px; border: 1px solid black; width: 50%; height: 40vh;">
+					<img alt="" src="../userController/getImage?slikaId=${picture.slikaId }" style="width: 100%; height: 100%;">
+				</div>
+				</c:forEach>
 			</center>
-		</c:if>
-	</center>
+			</c:if>
 
 
 	<%@ include file="userFooter.jsp" %>

@@ -16,17 +16,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.pd.repository.IskustvoRepository;
 import com.pd.repository.PlaninaRepository;
 import com.pd.repository.PlaninarskiDomRepository;
 import com.pd.repository.PosjetaRepository;
 import com.pd.repository.RezervacijaRepository;
+import com.pd.repository.SlikaRepository;
+import com.pd.repository.StazaRepository;
 import com.pd.repository.ZnamenitostRepository;
 
+import model.Iskustvo;
 import model.Osoba;
 import model.Planina;
 import model.PlaninarskiDom;
 import model.Posjeta;
 import model.Rezervacija;
+import model.Slika;
+import model.Staza;
 import model.Znamenitost;
 
 @Controller
@@ -42,11 +48,60 @@ public class UserController {
 	@Autowired
 	private RezervacijaRepository rezervacijaRepository;
 	
+	@Autowired 
+	private IskustvoRepository iskustvoRepository;
+	
+	@Autowired
+	private SlikaRepository slikaRepository;
+	
 	@Autowired
 	private PosjetaRepository posjetaRepository;
 
 	@Autowired
 	private PlaninarskiDomRepository pdRepository;
+	
+	@Autowired
+	private StazaRepository stazaRepository;
+	
+	@RequestMapping(value = "/saveComment", method = RequestMethod.POST)
+	public String saveComment(String comment, HttpServletRequest request) {
+		Posjeta pos = (Posjeta) request.getSession().getAttribute("commentAllowed");
+		pos.setKomentar(comment);
+		posjetaRepository.flush();
+		return "user/trailReviewPage";
+	}
+	
+	@RequestMapping(value = "/checkComment")
+	public String checkAllowedComm(String znamenitostId, HttpServletRequest request) {
+		Integer znamIdInt = Integer.parseInt(znamenitostId);
+		Osoba osoba = (Osoba) request.getSession().getAttribute("osoba");
+		if (osoba != null) {
+			Posjeta pos = posjetaRepository.findPosjetaByZnamenitostAndOsoba(znamIdInt, osoba.getOsobaId());
+			request.setAttribute("commentAllowed", pos);
+		}
+		return "user/trailReviewPage";
+	}
+	
+	@RequestMapping(value = "/getTrails")
+	public String getTrails(String planinaId, HttpServletRequest request) {
+		Integer planinaIdInt = Integer.parseInt(planinaId);
+		List<Staza> trails = stazaRepository.findStazeByPlanina(planinaIdInt);
+		request.getSession().setAttribute("trails", trails);
+		return "user/trailReviewPage";
+	}
+	
+	@RequestMapping(value = "/showTrail")
+	public void showTrail(String stazaId, HttpServletRequest request, HttpServletResponse response) {
+		Integer ids = Integer.parseInt(stazaId);
+		Staza staza = stazaRepository.findById(ids).get();
+		byte[] picture = staza.getMapa();
+		response.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE);
+		try {
+			response.getOutputStream().write(picture);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	@RequestMapping(value="/trailReview")
 	public String trailReview(HttpServletRequest request) {
@@ -64,14 +119,14 @@ public class UserController {
 		PlaninarskiDom pd = pdRepository.findById(planDomIdInt).get();
 		Znamenitost zn = znamenitostRepository.findById(znamIdInt).get();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-mm-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
 		Date resStart = sdf.parse(reservationStart);
-		Date resEnd = sdf.parse(reservationEnd);
-		Date srd = sdf.parse(sightReservationDate);
+		Date resEnd = new Date(sdf.parse(reservationEnd).getTime());
+		Date srd = new Date(sdf.parse(sightReservationDate).getTime());
 		
 		Rezervacija r = new Rezervacija();
 		r.setOsobaBean((Osoba) request.getSession().getAttribute("osoba"));
-		r.setDoDatum(resEnd);
+		r.setOdDatum(resEnd);
 		r.setDoDatum(resStart);
 		r.setPlaninarskiDomBean(pd);
 		Rezervacija res = rezervacijaRepository.save(r);
@@ -91,8 +146,6 @@ public class UserController {
 		Integer id = Integer.parseInt(planinaId);
 		List<PlaninarskiDom> domovi = pdRepository.findPlaninarskiDomByPlanina(id);
 		List<Znamenitost> znamenitosti = znamenitostRepository.findZnamenitostiByPlanina(id);
-		System.out.println(domovi);
-		System.out.println(znamenitosti);
 		request.getSession().setAttribute("domovi", domovi);
 		request.getSession().setAttribute("znamenitosti", znamenitosti);
 		return "user/reservation";
@@ -105,20 +158,30 @@ public class UserController {
 		return "user/reservation";
 	}
 
-	@RequestMapping(value = "/prikaziSliku", method = RequestMethod.POST)
-	public String prikaziSliku(@Param("mpf") MultipartFile mpf, HttpServletRequest request) {
-		request.getSession().setAttribute("mpf", mpf);
+	@RequestMapping(value = "/saveSlika", method = RequestMethod.POST)
+	public String saveSlika(@Param("mpf") MultipartFile mpf, String iskustvoString, HttpServletRequest request) throws IOException {
+		Integer isk = Integer.parseInt(iskustvoString);
+		Iskustvo is = iskustvoRepository.findById(isk).get();
+		Slika slika = new Slika();
+		slika.setIskustvoBean(is);
+		slika.setSlika(mpf.getBytes());
+		slikaRepository.save(slika);
+		
+		List<Slika> sveSlike = slikaRepository.findAll();
+		request.getSession().setAttribute("allPictures", sveSlike);
 		return "user/portal";
 	}
 
 	@RequestMapping(value = "/getImage", method = RequestMethod.GET)
-	public String getImage(@Param("mpf") String mpf, HttpServletRequest request, HttpServletResponse response)
-			throws IOException {
-		MultipartFile mf = (MultipartFile) request.getAttribute(mpf);
-		byte[] picture = mf.getBytes();
+	public void getImage(@Param("slikaId") String slikaId, HttpServletRequest request, HttpServletResponse response){
+		Integer ids = Integer.parseInt(slikaId);
+		Slika slika = slikaRepository.findById(ids).get();
+		byte[] picture = slika.getSlika();
 		response.setContentType(org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE);
-		response.getOutputStream().write(picture);
-		request.getSession().setAttribute("slika", null);
-		return "user/portal";
+		try {
+			response.getOutputStream().write(picture);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

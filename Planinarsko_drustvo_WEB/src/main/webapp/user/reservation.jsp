@@ -53,12 +53,12 @@
 	<c:if test="${not empty domovi and not empty znamenitosti }">
 		<center>
 			<div style="margin: 200px 0px;">
-				<form action="">
+				<form action="../userController/saveReservation" method="post">
 				<table>
 					<tr>
 						<th>Одаберите планинарски дом:</th>
 						<td>
-							<select name="planinrskiDomId">
+							<select name="planinarskiDomId">
 								<c:forEach var="dom" items="${domovi }">
 									<option value="${dom.planinarskiDomId }">${dom.naziv }</option>
 								</c:forEach>
