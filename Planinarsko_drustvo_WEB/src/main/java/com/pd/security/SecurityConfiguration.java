@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				.authorizeRequests()
 				.antMatchers("/userController/**", "indexUser.jsp", "/user/**").hasRole("planinar")
 				.antMatchers("/secretaryController/**", "/secretary/**").hasRole("sekretar")
-				.antMatchers("/loginController/**", "/index_style/js/main.js", "/index_style/vendor/**")
+				.antMatchers("/loginController/**", "/index_style/**", "/logged_style/**", "/index_style/vendor/**")
 				.permitAll()
 				.anyRequest().authenticated()
 				.and()
