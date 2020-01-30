@@ -33,7 +33,7 @@
 						<li class="active"><a href="../userController/getPlanine"
 							style="width: 120px; text-align: center; margin-left: 5px;">Резервација</a></li>
 						<li class="active"><a href="../userController/trailReview"style="width: 120px; text-align: center; margin-left: 5px;">Стазе</a></li>
-						<li class="active"><a href="../user/portal.jsp"style="width: 120px; text-align: center; margin-left: 5px;">Портал</a></li>
+						<li class="active"><a href="../user/experiences.jsp"style="width: 120px; text-align: center; margin-left: 5px;">Искуства</a></li>
 						<li class="active"><a href="../loginController/logOut"
 							style="width: 120px; text-align: center; margin-left: 5px;"
 							onclick="">Одјава</a></li>

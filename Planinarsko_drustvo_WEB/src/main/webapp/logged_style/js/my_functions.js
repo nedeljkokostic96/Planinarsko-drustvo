@@ -11,6 +11,7 @@ function closeExtensionFormDiv() {
 	document.getElementById('extension').style["display"] = "none";
 }
 
+
 function hiddeForm() {
 	document.getElementById('commForm').style["display"] = "none";
 }

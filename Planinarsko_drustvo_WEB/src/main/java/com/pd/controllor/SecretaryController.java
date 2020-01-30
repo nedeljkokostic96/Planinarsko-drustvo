@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +64,7 @@ public class SecretaryController {
 
 	@Autowired
 	private ZnamenitostRepository znamenitostRepository;
-
+	
 	@RequestMapping(value = "/getUsers")
 	public String getAllUsers(HttpServletRequest request) {
 		List<Osoba> osobe = osobaRepository.findOsobeByRole("planinar");
@@ -117,42 +118,51 @@ public class SecretaryController {
 	@RequestMapping(value = "/addNewMember", method = RequestMethod.POST)
 	public void addNewMember(String name, String surname, String jmbg, String birthDate, String phone, String password,
 			HttpServletRequest request, HttpServletResponse response) throws IOException, ParseException {
-		Osoba osoba = new Osoba();
-		osoba.setIme(name);
-		osoba.setPrezime(surname);
-		osoba.setDatumRodjenja(new SimpleDateFormat("yyyy-mm-dd").parse(birthDate));
-		osoba.setJmbg(jmbg);
-		osoba.setBrojTelefona(phone);
-		osoba.setPassword(password);
+		
+		if (name == null || surname == null || jmbg == null || birthDate == null || phone == null || password == null) {
+			response.sendRedirect("../secretary/newMember");
+		}
+		
+		try {
+			Osoba osoba = new Osoba();
+			osoba.setIme(name);
+			osoba.setPrezime(surname);
+			osoba.setDatumRodjenja(new SimpleDateFormat("yyyy-mm-dd").parse(birthDate));
+			osoba.setJmbg(jmbg);
+			osoba.setBrojTelefona(phone);
+			osoba.setPassword(getHashedValue(password));
 
-		Uloga uloga = ulogaRepository.findById(1).get();
-		osoba.setUlogaBean(uloga);
+			Uloga uloga = ulogaRepository.findById(1).get();
+			osoba.setUlogaBean(uloga);
 
-		Osoba savedOsoba = osobaRepository.save(osoba);
+			Osoba savedOsoba = osobaRepository.save(osoba);
 
-		osobaRepository.flush();
+			osobaRepository.flush();
 
-		Clanarina c = new Clanarina();
+			Clanarina c = new Clanarina();
 
-		c.setOdDatum(new Date());
+			c.setOdDatum(new Date());
 
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, 365);
-		Date future = cal.getTime();
-		c.setDoDatum(future);
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DATE, 365);
+			Date future = cal.getTime();
+			c.setDoDatum(future);
 
-		float price = 8400.0f;
-		c.setIznos(price);
+			float price = 8400.0f;
+			c.setIznos(price);
 
-		c.setOsoba1(savedOsoba);
-		Osoba sekretar = (Osoba) request.getSession().getAttribute("osoba");
-		c.setOsoba2(sekretar);
+			c.setOsoba1(savedOsoba);
+			Osoba sekretar = (Osoba) request.getSession().getAttribute("osoba");
+			c.setOsoba2(sekretar);
 
-		PlaninarskoDrustvo pd = pdRepository.findById(1).get();
-		c.setPlaninarskoDrustvoBean(pd);
-		clanarinaRepository.save(c);
-		clanarinaRepository.flush();
-		response.sendRedirect("../secretaryController/getUsers");
+			PlaninarskoDrustvo pd = pdRepository.findById(1).get();
+			c.setPlaninarskoDrustvoBean(pd);
+			clanarinaRepository.save(c);
+			clanarinaRepository.flush();
+			response.sendRedirect("../secretaryController/getUsers");
+		} catch (Exception e) {
+			response.sendRedirect("../secretary/newMember");
+		}
 	}
 
 	@RequestMapping(value = "/getStatistics", method = RequestMethod.GET)
@@ -193,6 +203,11 @@ public class SecretaryController {
 		List<Posjeta> visitDates = posjetaRepository.findPosjetaByZnamenitost(sightInt);
 		request.getSession().setAttribute("visitDates", visitDates);
 		return "secretary/sightReservated";
+	}
+	
+	private String getHashedValue(String password) {
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		return passwordEncoder.encode(password);
 	}
 
 }

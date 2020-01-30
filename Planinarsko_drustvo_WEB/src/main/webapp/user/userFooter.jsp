@@ -16,7 +16,7 @@
 </head>
 <body>
 	<footer>
-		<div id="contact">
+		<div id="contact" style="margin-top: 100px;">
 			<div class="container">
 				<div class="text-center">
 					<h3>Контактирајте нас</h3>

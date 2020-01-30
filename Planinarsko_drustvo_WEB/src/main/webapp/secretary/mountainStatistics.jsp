@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="sf" uri="http://www.springframework.org/tags/form"%>
 <%@taglib prefix="s" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,28 +21,50 @@
 <link href="../logged_style/css/animate.min.css" rel="stylesheet">
 <link href="../logged_style/css/style.css" rel="stylesheet" />
 <script type="text/javascript" src="../logged_style/js/my_functions.js"></script>
+<style type="text/css">
+.stat {
+	padding: 20px;
+	margin: 200px 10% 100px 10%;
+	width: 60%;
+	height: auto;
+	overflow: auto;
+	background-color: #dbffc9;
+	border-radius: 10px;
+	align-content: center;
+}
+
+th {
+	padding: 20px 100px;
+}
+
+td {
+	padding: 20px 100px;
+}
+</style>
 </head>
 <body>
-	<%@ include file="secretaryHeader.jsp" %>
-	
+	<%@ include file="secretaryHeader.jsp"%>
+
 	<c:if test="${not empty statistics }">
-		<div style="margin: 200px 0px; width: 100%; height: auto;">
-			<table>
-				<tr>
-					<th>Планина</th>
-					<th>Број ноћења</th>
-				</tr>
-				<c:forEach var="stat" items="${statistics }">
+		<center>
+			<div class="stat">
+				<table border="1">
 					<tr>
-						<td>${stat.planina.naziv }</td>
-						<td>${stat.nightsReserved }</td>
+						<th>Планина</th>
+						<th>Број ноћења</th>
 					</tr>
-				</c:forEach>
-			</table>
-		</div>
+					<c:forEach var="stat" items="${statistics }">
+						<tr>
+							<td>${stat.planina.naziv }</td>
+							<td>${stat.nightsReserved }</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</div>
+		</center>
 	</c:if>
-	
-	<%@ include file="secretaryFooter.jsp" %>
-	<%@ include file="jqueryScripts.jsp" %>
+
+	<%@ include file="secretaryFooter.jsp"%>
+	<%@ include file="jqueryScripts.jsp"%>
 </body>
 </html>

@@ -28,7 +28,7 @@ public class Iskustvo implements Serializable {
 	private Rezervacija rezervacijaBean;
 
 	//bi-directional many-to-one association to Slika
-	@OneToMany(mappedBy="iskustvoBean")
+	@OneToMany(mappedBy="iskustvoBean", fetch = FetchType.EAGER)
 	private List<Slika> slikas;
 
 	public Iskustvo() {

@@ -21,12 +21,48 @@
 <link href="../logged_style/css/animate.min.css" rel="stylesheet">
 <link href="../logged_style/css/style.css" rel="stylesheet" />
 <script type="text/javascript" src="../logged_style/js/my_functions.js"></script>
+
+<style type="text/css">
+.users{
+	padding:20px;
+	margin: 200px 5% 100px 5%;
+	width: 90%;
+	height: auto;
+	overflow: auto;
+	background-color: #dbffc9;
+	border-radius: 10px;
+}
+tr{
+	height: 40px;
+}
+
+th{
+	padding: 20px;
+}
+
+.row{
+	padding: 20px;
+}
+
+.button{
+	width:100%;  
+	height: 100%; 
+	background-color: #57b846; 
+	color: white;
+	margin: 0px;
+	padding: 10px;
+	border-radius: 5px;
+	font-size: 22px;
+	font-family: 'Roboto';
+	font-style: oblique;
+}
+</style>
 </head>
 <body>
 	<%@ include file="secretaryHeader.jsp" %>
 	
 	<c:if test="${not empty users }">
-		<div style="margin: 200px 0px;">
+		<div class="users">
 			<table id="users-results" border="1" style="width: 100%;">
 				<tr>
 					<th>Име</th>
@@ -40,14 +76,14 @@
 				</tr>
 				<c:forEach var="user" items="${users }">
 					<tr>
-						<td>${user.osoba.ime }</td>
-						<td>${user.osoba.prezime }</td>
-						<td>${user.osoba.jmbg }</td>
-						<td><fmt:formatDate type="date" value="${user.osoba.datumRodjenja }"/></td>
-						<td><fmt:formatDate type="date" value="${user.clanarina.odDatum }"/></td>
-						<td><fmt:formatDate type="date" value="${user.clanarina.doDatum }"/></td>
-						<td>${user.clanarina.iznos } РСД</td>
-						<td><a href="../secretaryController/membershipExtension?osobaId=${user.osoba.osobaId }" style="width:auto; height: auto;">Продужетак чланарине</a></td>
+						<td class="row">${user.osoba.ime }</td>
+						<td class="row">${user.osoba.prezime }</td>
+						<td class="row">${user.osoba.jmbg }</td>
+						<td class="row"><fmt:formatDate type="date" value="${user.osoba.datumRodjenja }"/></td>
+						<td class="row"><fmt:formatDate type="date" value="${user.clanarina.odDatum }"/></td>
+						<td class="row"><fmt:formatDate type="date" value="${user.clanarina.doDatum }"/></td>
+						<td class="row">${user.clanarina.iznos } РСД</td>
+						<td><a href="../secretaryController/membershipExtension?osobaId=${user.osoba.osobaId }"><div class="button">Продужетак чланарине</div></a></td>
 					</tr>
 				</c:forEach>
 			</table>
@@ -84,7 +120,7 @@
 					</tr>
 					<tr>
 						<th></th>
-						<td><input type="submit" value="Продужи чланарину"></td>
+						<td><input type="submit" class="button" value="Продужи чланарину"></td>
 					</tr>
 				</table>
 					<input type="text" name="userId" value="${extensionUser.osoba.osobaId }" hidden onclick="">

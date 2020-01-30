@@ -15,7 +15,7 @@ public class UserRoleService implements UserDetailsService {
 	
 	@Autowired
 	private OsobaRepository osobaRepository;
-
+	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		Osoba osoba = osobaRepository.findOsobaByJMBG(username);

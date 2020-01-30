@@ -33,23 +33,24 @@
 <!--===============================================================================================-->
 </head>
 <body>
-	
+	<c:url var="loginUrl" value="/login" />
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="../loginController/logIn">
+				<form class="login100-form validate-form p-l-55 p-r-55 p-t-178" method="POST" action="${loginUrl}">
 					<span class="login100-form-title">
 						Пријава
 					</span>
 
 					<div class="wrap-input100 validate-input m-b-16" data-validate="Унесите корисничко име">
-						<input class="input100" type="text" name="jmbg" placeholder="ЈМБГ" min="13" max="13">
+						<input class="input100" type="text" name="username" placeholder="ЈМБГ" min="13" max="13">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate = "Унесите шифру">
 						<input class="input100" type="password" name="password" placeholder="Шифра" >
 						<span class="focus-input100"></span>
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					</div>
 
 					<div class="text-right p-t-13 p-b-23">
@@ -61,7 +62,7 @@
 							Улогуј се
 						</button>
 					</div>
-
+					
 					<div class="flex-col-c p-t-170 p-b-40">
 						
 					</div>

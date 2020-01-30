@@ -21,6 +21,48 @@
 <link href="../logged_style/css/animate.min.css" rel="stylesheet">
 <link href="../logged_style/css/style.css" rel="stylesheet" />
 <script type="text/javascript" src="../logged_style/js/my_functions.js"></script>
+
+<style type="text/css">
+.result {
+	padding: 20px;
+	margin: 100px 10% 200px 10%;
+	width: 60%;
+	height: auto;
+	overflow: auto;
+	background-color: #dbffc9;
+	border-radius: 10px;
+	align-content: center;
+}
+
+.result th {
+	padding: 20px 100px;
+}
+
+.result td {
+	padding: 20px 100px;
+}
+
+
+.button{
+	width:100%;  
+	height: 100%; 
+	background-color: #57b846; 
+	color: white;
+	margin: 0px;
+	padding: 10px;
+	border-radius: 5px;
+	font-size: 22px;
+	font-family: 'Roboto';
+	font-style: oblique;
+}
+
+.field{
+		width:200px;
+		height: 40px;
+		border-radius: 5px;
+	}
+
+</style>
 </head>
 <body>
 	<%@ include file="secretaryHeader.jsp" %>
@@ -33,7 +75,7 @@
 					<tr>
 						<td><label>Одаберите знаменитост:</label></td>
 						<td>
-							<select name="sight">
+							<select name="sight" class="field">
 								<c:forEach var="s" items="${sights }">
 									<option value="${s.znamenitostId }">${s.naziv }</option>
 								</c:forEach>
@@ -42,7 +84,7 @@
 					</tr>
 					<tr>
 						<td></td>
-						<td><input type="submit" value="Пронађи"></td>
+						<td><input type="submit" value="Пронађи" class="button"></td>
 					</tr>
 				</table>
 			</form>
@@ -51,16 +93,24 @@
 	</c:if>
 	<c:if test="${not empty visitDates }">
 		<center>
-			<table>
-				<tr><th>Термини посјете</th></tr>
+			<div class="result">
+				<table border="1">
+				<tr>
+				<th>Термин посјете</th>
+				<th>Посјетилац</th>
+				</tr>
 				<c:forEach var="date" items="${visitDates }">
 					<tr>
 						<td>
 							${date.termin }
 						</td>
+						<td>
+							${date.rezervacijaBean.osobaBean.ime } ${date.rezervacijaBean.osobaBean.prezime }
+						</td>
 					</tr>
 				</c:forEach>
 			</table>
+			</div>
 		</center>
 	</c:if>
 	
